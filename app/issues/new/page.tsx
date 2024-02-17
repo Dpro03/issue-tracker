@@ -21,21 +21,22 @@ const NewIssuePage = () => {
   });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      setIsSubmitting(true);
+      await axios.post('/api/issues', data);
+      router.push('/issues');
+    } catch (error) {
+      setIsSubmitting(false);
+      setError('Something went wrong');
+    }
+  });
 
   return (
     <div>
       <form
         className='max-w-xl space-y-3'
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            setIsSubmitting(true);
-            await axios.post('/api/issues', data);
-            router.push('/issues');
-          } catch (error) {
-            setIsSubmitting(false);
-            setError('Something went wrong');
-          }
-        })}
+        onSubmit={onSubmit}
       >
         <TextField.Root>
           <TextField.Input placeholder='Title' {...register('title')} />
